@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import ThemeProvider from "@/components/ThemeProvider";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
+import Background from "@/components/Background";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -43,6 +44,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* overlay  */}
+          <div className="absolute left-0 top-0 -z-10 size-full bg-background/10 backdrop-blur-md dark:bg-background/70">
+            &nbsp;
+          </div>
+
+          <Background />
+
           <header>
             <Navigation />
           </header>
