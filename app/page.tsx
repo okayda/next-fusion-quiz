@@ -1,3 +1,9 @@
 export default function Home() {
-  return <h1>Hello World</h1>;
+  return (
+    <section>
+      <h1 className="text-4xl">
+        Welcome to the <span className="font-semibold">Gemini AI Quiz!</span>
+      </h1>
+    </section>
+  );
 }
