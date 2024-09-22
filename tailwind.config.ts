@@ -12,6 +12,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         jacques: ["var(--font-jacques-serif)"],
+        geistMono: ["var(--font-geist-mono)"],
       },
 
       colors: {
