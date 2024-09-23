@@ -39,7 +39,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {/* overlay  glassmorphism */}
-          <div className="absolute left-0 top-0 -z-10 size-full bg-background/20 backdrop-blur-md dark:bg-background/70">
+          <div className="absolute left-0 top-0 -z-10 size-full bg-background/20 backdrop-blur-md dark:bg-background/70 dark:backdrop-blur-xl lg:dark:bg-background/85">
             &nbsp;
           </div>
 
