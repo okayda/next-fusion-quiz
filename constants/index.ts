@@ -5,9 +5,9 @@ export const questions = [
 ];
 
 export const difficulty = [
-  { value: "easy", label: "easy" },
-  { value: "medium", label: "medium" },
-  { value: "hard", label: "hard" },
+  { value: "Easy", label: "Easy" },
+  { value: "Medium", label: "Medium" },
+  { value: "Hard", label: "Hard" },
 ];
 
 export const subject = [
@@ -30,6 +30,6 @@ export const subject = [
 ];
 
 export const answers = [
-  { value: "question", label: "question" },
-  { value: "explanation", label: "explanation" },
+  { value: "Question", label: "Question" },
+  { value: "Explanation", label: "Explanation" },
 ];

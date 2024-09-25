@@ -50,7 +50,7 @@ export default function HomeContent() {
           <p className="mb-2">Difficulty level?</p>
 
           <Tabs
-            defaultValue="easy"
+            defaultValue="Easy"
             className="w-full"
             onValueChange={handleDifficultyChange}
           >
