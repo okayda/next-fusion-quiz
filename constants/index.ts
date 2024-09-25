@@ -5,9 +5,9 @@ export const questions = [
 ];
 
 export const difficulty = [
-  { value: "Easy", label: "Easy" },
-  { value: "Medium", label: "Medium" },
-  { value: "Hard", label: "Hard" },
+  { value: "easy", label: "easy" },
+  { value: "medium", label: "medium" },
+  { value: "hard", label: "hard" },
 ];
 
 export const subject = [
@@ -27,4 +27,9 @@ export const subject = [
     title: "Next.js",
     img: "/svgs/nextjs-light.svg",
   },
+];
+
+export const answers = [
+  { value: "question", label: "question" },
+  { value: "explanation", label: "explanation" },
 ];
