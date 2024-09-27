@@ -32,7 +32,7 @@ export default function HomeContent() {
           <p className="mb-2">How many questions?</p>
 
           <Tabs
-            defaultValue="3"
+            defaultValue={selectedQuestions}
             className="w-full"
             onValueChange={handleQuestionsChange}
           >
@@ -50,7 +50,7 @@ export default function HomeContent() {
           <p className="mb-2">Difficulty level?</p>
 
           <Tabs
-            defaultValue="Easy"
+            defaultValue={selectedDifficulty}
             className="w-full"
             onValueChange={handleDifficultyChange}
           >
@@ -69,13 +69,13 @@ export default function HomeContent() {
         <p className="mb-3">Pick a subject to get started.</p>
 
         <ul className="flex flex-col gap-3">
-          {subject.map(({ title, img }) => (
+          {subject.map(({ title, value, img }) => (
             <li key={title}>
               <Link
                 href={{
                   pathname: "/generated",
                   query: {
-                    subject: title,
+                    subject: value,
                     questions: selectedQuestions,
                     difficulty: selectedDifficulty,
                   },

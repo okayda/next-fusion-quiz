@@ -8,31 +8,70 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
-import { LogOut, BadgeCheck } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 
 import { answers } from "@/constants";
+import { quiz } from "@/constants/quiz";
 
 const MyCodeBlock = dynamic(() => import("@/components/MyCodeBlock"), {
   ssr: false,
 });
 
-const letters = ["a", "b", "c", "d"];
-let correctAnswer = 0;
-let currQuestion = 0;
+const optionLabels = ["a", "b", "c", "d"];
 
-export default function GeneratedPage() {
-  const [radioValue, setRadioValue] = useState("");
-  const [isSubmit, setIsSubmit] = useState(false);
+export default function QuizPage() {
+  const [selectedOption, setSelectedOption] = useState("");
+  const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+
   const searchParams = useSearchParams();
 
-  const questions = searchParams.get("questions") || "3";
-  const difficulty = searchParams.get("difficulty") || "Easy";
-  const subject = searchParams.get("subject") || "JavaScript";
+  const totalQuestions = parseInt(searchParams.get("questions") || "3");
+  const difficultyLevel = searchParams.get("difficulty") || "Easy";
+  const subjectName = searchParams.get("subject") || "JavaScript";
 
-  const handleSubmit = function () {};
+  const quizKey =
+    `${subjectName}${difficultyLevel}${totalQuestions}` as keyof typeof quiz;
+  const questionsList = quiz[quizKey];
+
+  // Handle the case when the quiz is over
+  if (currentQuestionIndex >= questionsList.length) {
+    return (
+      <div className="text-center">
+        <h1 className="text-2xl font-bold">Quiz Completed</h1>
+        <p className="mt-4 text-lg">
+          Your score: {correctAnswersCount} out of {questionsList.length}
+        </p>
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: "secondary" }),
+            "mt-6 gap-2 border border-rose-900 font-bold text-rose-700 dark:bg-slate-900",
+          )}
+        >
+          Return Home
+        </Link>
+      </div>
+    );
+  }
+
+  const currentQuestion = questionsList[currentQuestionIndex];
+
+  const handleAnswerSubmit = () => {
+    if (selectedOption === currentQuestion.answer) {
+      setCorrectAnswersCount((prev) => prev + 1);
+    }
+    setHasSubmittedAnswer(true);
+  };
+
+  const handleNextQuestion = () => {
+    setCurrentQuestionIndex((prev) => prev + 1);
+    setHasSubmittedAnswer(false);
+    setSelectedOption("");
+  };
 
   return (
     <div className="lg:flex lg:gap-14">
@@ -45,7 +84,7 @@ export default function GeneratedPage() {
               "gap-2 border border-rose-900 font-bold text-rose-700 dark:bg-slate-900",
             )}
           >
-            Exit quiz
+            Exit Quiz
             <LogOut width={16} height={16} />
           </Link>
         </div>
@@ -53,52 +92,58 @@ export default function GeneratedPage() {
         <div className="mb-4">
           <p className="mb-2">
             <span className="font-semibold text-green-600">
-              {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+              {difficultyLevel.charAt(0).toUpperCase() +
+                difficultyLevel.slice(1)}
             </span>{" "}
-            Question <strong>1</strong> of <strong>{questions}</strong>
+            Question <strong>{currentQuestionIndex + 1}</strong> of{" "}
+            <strong>{totalQuestions}</strong>
           </p>
 
-          <Progress value={50} />
+          <Progress
+            value={
+              ((currentQuestionIndex + (hasSubmittedAnswer ? 1 : 0)) /
+                totalQuestions) *
+              100
+            }
+          />
         </div>
 
-        <Tabs defaultValue="Question" className="mb-12 w-full">
-          <TabsList className="grid min-h-[45px] w-full grid-cols-2 border font-bold text-foreground">
-            {answers.map((tab) => (
-              <TabsTrigger key={tab.label} value={tab.value}>
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+        <div className="mb-10 md:mb-12">
+          <Tabs defaultValue="Question">
+            <TabsList className="grid min-h-[45px] w-full grid-cols-2 border font-bold text-foreground">
+              {answers.map((tab) => (
+                <TabsTrigger key={tab.label} value={tab.value}>
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
 
-        {/* <h2
+        <p
           className={cn(
-            "font-semibold",
-            data[currQuestion].codeSyntaxIsAvailable
-              ? "text-md mb-2"
-              : "mb-4 text-lg",
+            "text-base font-semibold",
+            currentQuestion.hasCodeSyntax ? "text-md mb-2.5" : "md:text-lg",
           )}
         >
-          {data[currQuestion].questionName}
-        </h2> */}
+          {currentQuestion.question}
+        </p>
 
-        {/* <div
-          className={cn(
-            "mb-6 text-xs md:mb-10 md:text-sm",
-            data[currQuestion].codeSyntaxIsAvailable ? "block" : "none",
-          )}
-        >
-          <MyCodeBlock codeSyntax={data[currQuestion].codeSyntax} />
-        </div> */}
+        {currentQuestion.hasCodeSyntax && (
+          <div className="mb-6 text-xs md:mb-10 md:text-sm">
+            <MyCodeBlock codeSyntax={currentQuestion.code} />
+          </div>
+        )}
       </div>
 
-      {/* <div className="lg:w-full">
+      <div className="lg:w-full">
         <RadioGroup.Root
           className="mb-6 flex flex-col space-y-3"
-          value={radioValue}
-          onValueChange={setRadioValue}
+          value={selectedOption}
+          onValueChange={setSelectedOption}
+          disabled={hasSubmittedAnswer}
         >
-          {data[currQuestion].choices.map((choice: string, i: number) => (
+          {currentQuestion.choices.map((choice: string, index: number) => (
             <div key={choice} className="flex items-center">
               <RadioGroup.Item
                 id={choice}
@@ -109,10 +154,17 @@ export default function GeneratedPage() {
                 htmlFor={choice}
                 className={cn(
                   "flex w-full cursor-pointer items-start gap-4 rounded-md border bg-background px-2 py-2.5 transition-colors peer-aria-checked:border-green-500 peer-aria-checked:bg-secondary dark:bg-slate-900",
+                  hasSubmittedAnswer
+                    ? choice === currentQuestion.answer
+                      ? "border-green-500"
+                      : selectedOption === choice
+                        ? "peer-aria-checked:border-amber-500"
+                        : "border-rose-500"
+                    : "",
                 )}
               >
-                <div className="rounded-md border bg-background px-3 py-1 font-medium peer-aria-checked:bg-primary-foreground">
-                  {letters[i].toUpperCase()}
+                <div className="rounded-md border border-slate-200 bg-background px-3 py-1 font-medium dark:border-slate-700">
+                  {optionLabels[index].toUpperCase()}
                 </div>
                 <span className="self-center text-sm font-medium">
                   {choice}
@@ -122,15 +174,28 @@ export default function GeneratedPage() {
           ))}
         </RadioGroup.Root>
 
-        <Button
-          type="submit"
-          className="w-full py-2.5 font-semibold"
-          onClick={handleSubmit}
-          disabled={!radioValue}
-        >
-          Submit
-        </Button>
-      </div> */}
+        <div className="flex flex-col gap-3.5">
+          <Button
+            type="button"
+            className="h-[42px] w-full font-semibold"
+            onClick={handleAnswerSubmit}
+            disabled={!selectedOption || hasSubmittedAnswer}
+          >
+            {!hasSubmittedAnswer ? "Submit" : "Already validated"}
+          </Button>
+
+          {hasSubmittedAnswer && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={handleNextQuestion}
+              className="h-[42px] w-full border border-green-700 bg-background font-semibold"
+            >
+              Next Question
+            </Button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
