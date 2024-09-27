@@ -2,43 +2,37 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
-import { CodeBlock, dracula } from "react-code-blocks";
-import { LogOut } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Progress } from "@/components/ui/progress";
 import * as RadioGroup from "@radix-ui/react-radio-group";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { buttonVariants } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+import { LogOut, BadgeCheck } from "lucide-react";
+
 import { answers } from "@/constants";
 
-const code = `const numbers = [1, 2, 3, 4];
-const doubled = numbers.map(num => num * 2);
-console.log(...doubled);`;
+const MyCodeBlock = dynamic(() => import("@/components/MyCodeBlock"), {
+  ssr: false,
+});
 
-const options = [
-  {
-    value: "a",
-    label: "Error",
-  },
-  { value: "b", label: "1 2 3 4" },
-  { value: "c", label: "2 4 6 8" },
-  {
-    value: "d",
-    label:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque cum temporibus necessitatibus qui natusm dolor sit amet consectetur adipisicing elit. Atque cum temporibus necessitatibus qui natus nonm dolor sit amet consectetur adipisicing elit. Atque cum temporibus necessitatibus qui natus non non quae alias, reprehenderit quod id!",
-  },
-];
+const letters = ["a", "b", "c", "d"];
+let correctAnswer = 0;
+let currQuestion = 0;
 
 export default function GeneratedPage() {
-  const [value, setValue] = useState("");
+  const [radioValue, setRadioValue] = useState("");
+  const [isSubmit, setIsSubmit] = useState(false);
   const searchParams = useSearchParams();
 
-  //   const subject = searchParams.get("subject");
-  const questions = searchParams.get("questions");
-  const difficulty = searchParams.get("difficulty") || "unknown";
+  const questions = searchParams.get("questions") || "3";
+  const difficulty = searchParams.get("difficulty") || "Easy";
+  const subject = searchParams.get("subject") || "JavaScript";
+
+  const handleSubmit = function () {};
 
   return (
     <div className="lg:flex lg:gap-14">
@@ -77,40 +71,51 @@ export default function GeneratedPage() {
           </TabsList>
         </Tabs>
 
-        {/* if the question is not related to the coding */}
-        {/* <h2 className="mb-4 text-lg font-semibold">What does HTML stand for?</h2> */}
+        {/* <h2
+          className={cn(
+            "font-semibold",
+            data[currQuestion].codeSyntaxIsAvailable
+              ? "text-md mb-2"
+              : "mb-4 text-lg",
+          )}
+        >
+          {data[currQuestion].questionName}
+        </h2> */}
 
-        <h2 className="text-md mb-2 font-semibold">
-          What will be the output of the following code?
-        </h2>
-
-        <div className="mb-6 text-xs md:mb-10 md:text-sm">
-          <CodeBlock text={code} language={"javascript"} theme={dracula} />
-        </div>
+        {/* <div
+          className={cn(
+            "mb-6 text-xs md:mb-10 md:text-sm",
+            data[currQuestion].codeSyntaxIsAvailable ? "block" : "none",
+          )}
+        >
+          <MyCodeBlock codeSyntax={data[currQuestion].codeSyntax} />
+        </div> */}
       </div>
 
-      <div className="w-full">
+      {/* <div className="lg:w-full">
         <RadioGroup.Root
           className="mb-6 flex flex-col space-y-3"
-          value={value}
-          onValueChange={setValue}
+          value={radioValue}
+          onValueChange={setRadioValue}
         >
-          {options.map((option) => (
-            <div key={option.value} className="flex items-center">
+          {data[currQuestion].choices.map((choice: string, i: number) => (
+            <div key={choice} className="flex items-center">
               <RadioGroup.Item
-                id={option.value}
-                value={option.value}
+                id={choice}
+                value={choice}
                 className="peer sr-only"
               />
               <label
-                htmlFor={option.value}
-                className="flex w-full cursor-pointer items-start gap-4 rounded-md border bg-background px-2 py-2.5 transition-colors peer-aria-checked:border-green-500 peer-aria-checked:bg-secondary dark:bg-slate-900"
+                htmlFor={choice}
+                className={cn(
+                  "flex w-full cursor-pointer items-start gap-4 rounded-md border bg-background px-2 py-2.5 transition-colors peer-aria-checked:border-green-500 peer-aria-checked:bg-secondary dark:bg-slate-900",
+                )}
               >
                 <div className="rounded-md border bg-background px-3 py-1 font-medium peer-aria-checked:bg-primary-foreground">
-                  {option.value.toUpperCase()}
+                  {letters[i].toUpperCase()}
                 </div>
                 <span className="self-center text-sm font-medium">
-                  {option.label}
+                  {choice}
                 </span>
               </label>
             </div>
@@ -119,12 +124,13 @@ export default function GeneratedPage() {
 
         <Button
           type="submit"
-          className="w-full py-2.5 font-semibold tracking-wide"
-          disabled={!value}
+          className="w-full py-2.5 font-semibold"
+          onClick={handleSubmit}
+          disabled={!radioValue}
         >
           Submit
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

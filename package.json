@@ -1,5 +1,5 @@
 {
-  "name": "next-gemini-ai-devs-quiz",
+  "name": "next-fusion-quiz",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.19.0",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-radio-group": "^1.2.0",

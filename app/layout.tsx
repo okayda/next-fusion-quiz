@@ -18,8 +18,8 @@ const jacquesSerif = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Gemini AI Quiz",
-  description: "Common interview questions with the help of Generative AI",
+  title: "Fusion Quiz",
+  description: "Common interview questions",
 };
 
 export default function RootLayout({
@@ -38,7 +38,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* overlay  glassmorphism */}
           <div className="absolute left-0 top-0 -z-10 size-full bg-background/20 backdrop-blur-md dark:bg-background/70 dark:backdrop-blur-xl lg:dark:bg-background/85">
             &nbsp;
           </div>
@@ -49,7 +48,7 @@ export default function RootLayout({
             <Navigation />
           </header>
 
-          <main className="font-geistMono mx-auto max-w-7xl px-3 md:px-8">
+          <main className="mx-auto max-w-7xl px-3 font-geistMono md:px-8">
             {children}
           </main>
         </ThemeProvider>

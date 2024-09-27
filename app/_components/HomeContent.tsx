@@ -25,7 +25,7 @@ export default function HomeContent() {
     <>
       <div className="lg:max-w-[500px]">
         <h1 className="mb-10 text-4xl md:mb-16 lg:text-5xl lg:leading-tight">
-          Welcome to the <span className="font-semibold">Gemini AI Quiz!</span>
+          Welcome to the <span className="font-semibold">Fusion Quiz!</span>
         </h1>
 
         <div className="mb-6">
