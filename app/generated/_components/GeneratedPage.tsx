@@ -10,10 +10,11 @@ import * as RadioGroup from "@radix-ui/react-radio-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { LogOut, BadgeCheck, CircleX } from "lucide-react";
 
 import { answers } from "@/constants";
 import { quiz } from "@/constants/quiz";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 
 const MyCodeBlock = dynamic(() => import("@/components/MyCodeBlock"), {
   ssr: false,
@@ -31,7 +32,7 @@ export default function QuizPage() {
 
   const totalQuestions = parseInt(searchParams.get("questions") || "3");
   const difficultyLevel = searchParams.get("difficulty") || "Easy";
-  const subjectName = searchParams.get("subject") || "JavaScript";
+  const subjectName = searchParams.get("subject") || "javascript";
 
   const quizKey =
     `${subjectName}${difficultyLevel}${totalQuestions}` as keyof typeof quiz;
@@ -76,12 +77,12 @@ export default function QuizPage() {
   return (
     <div className="lg:flex lg:gap-14">
       <div className="lg:w-full lg:max-w-[560px]">
-        <div className="mb-4 md:mb-6 lg:mb-8">
+        <div className="mb-6 lg:mb-8">
           <Link
             href="/"
             className={cn(
               buttonVariants({ variant: "secondary" }),
-              "gap-2 border border-rose-900 font-bold text-rose-700 dark:bg-slate-900",
+              "gap-2 border border-rose-900 text-[15px] font-semibold text-rose-900 dark:bg-slate-900",
             )}
           >
             Exit Quiz
@@ -90,7 +91,7 @@ export default function QuizPage() {
         </div>
 
         <div className="mb-4">
-          <p className="mb-2">
+          <p className="mb-2 text-sm md:text-base">
             <span className="font-semibold text-green-600">
               {difficultyLevel.charAt(0).toUpperCase() +
                 difficultyLevel.slice(1)}
@@ -122,12 +123,21 @@ export default function QuizPage() {
 
         <p
           className={cn(
-            "text-base font-semibold",
-            currentQuestion.hasCodeSyntax ? "text-md mb-2.5" : "md:text-lg",
+            "text-[15px] font-semibold leading-snug lg:mb-0",
+            currentQuestion.hasCodeSyntax
+              ? "mb-2.5 md:text-base"
+              : "mb-3 md:text-lg",
           )}
         >
           {currentQuestion.question}
         </p>
+
+        <Separator
+          className={cn(
+            "mb-6 border lg:hidden",
+            currentQuestion.hasCodeSyntax ? "hidden" : "block",
+          )}
+        />
 
         {currentQuestion.hasCodeSyntax && (
           <div className="mb-6 text-xs md:mb-10 md:text-sm">
@@ -143,35 +153,59 @@ export default function QuizPage() {
           onValueChange={setSelectedOption}
           disabled={hasSubmittedAnswer}
         >
-          {currentQuestion.choices.map((choice: string, index: number) => (
-            <div key={choice} className="flex items-center">
-              <RadioGroup.Item
-                id={choice}
-                value={choice}
-                className="peer sr-only"
-              />
-              <label
-                htmlFor={choice}
-                className={cn(
-                  "flex w-full cursor-pointer items-start gap-4 rounded-md border bg-background px-2 py-2.5 transition-colors peer-aria-checked:border-green-500 peer-aria-checked:bg-secondary dark:bg-slate-900",
-                  hasSubmittedAnswer
-                    ? choice === currentQuestion.answer
-                      ? "border-green-500"
-                      : selectedOption === choice
-                        ? "peer-aria-checked:border-amber-500"
-                        : "border-rose-500"
-                    : "",
-                )}
-              >
-                <div className="rounded-md border border-slate-200 bg-background px-3 py-1 font-medium dark:border-slate-700">
-                  {optionLabels[index].toUpperCase()}
-                </div>
-                <span className="self-center text-sm font-medium">
-                  {choice}
-                </span>
-              </label>
-            </div>
-          ))}
+          {currentQuestion.choices.map((choice: string, index: number) => {
+            const isCorrectSelectedOption =
+              hasSubmittedAnswer &&
+              selectedOption === choice &&
+              choice === currentQuestion.answer;
+
+            const isWrongSelectedOption =
+              hasSubmittedAnswer &&
+              selectedOption === choice &&
+              choice !== currentQuestion.answer;
+
+            return (
+              <div key={choice} className="flex items-center">
+                <RadioGroup.Item
+                  id={choice}
+                  value={choice}
+                  className="peer sr-only"
+                />
+                <label
+                  htmlFor={choice}
+                  className={cn(
+                    "flex w-full cursor-pointer items-start gap-3 rounded-md border bg-background p-2.5 transition-colors peer-aria-checked:border-green-500 peer-aria-checked:bg-secondary dark:bg-slate-900",
+                    hasSubmittedAnswer
+                      ? choice === currentQuestion.answer
+                        ? "border-green-500"
+                        : selectedOption === choice
+                          ? "peer-aria-checked:border-amber-500"
+                          : "border-rose-500"
+                      : "",
+                  )}
+                >
+                  <div className="rounded-md border border-slate-200 bg-background px-3 py-1 font-medium dark:border-slate-700">
+                    {isCorrectSelectedOption ? (
+                      <span className="block px-0">
+                        <BadgeCheck className="size-5 text-green-500" />
+                      </span>
+                    ) : isWrongSelectedOption ? (
+                      <span className="block px-0">
+                        <CircleX className="size-5 text-rose-500" />
+                      </span>
+                    ) : (
+                      <span className="block">
+                        {optionLabels[index].toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                  <span className="self-center text-sm font-medium">
+                    {choice}
+                  </span>
+                </label>
+              </div>
+            );
+          })}
         </RadioGroup.Root>
 
         <div className="flex flex-col gap-3.5">

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import ThemeProvider from "@/components/ThemeProvider";
+
 import "./globals.css";
+
+import ThemeProvider from "@/components/ThemeProvider";
 import Navigation from "@/components/Navigation";
 import Background from "@/components/Background";
 
@@ -48,7 +50,7 @@ export default function RootLayout({
             <Navigation />
           </header>
 
-          <main className="mx-auto max-w-7xl px-3 font-geistMono md:px-8">
+          <main className="mx-auto my-12 max-w-7xl px-3 font-geistMono md:my-14 md:px-8 lg:mt-32">
             {children}
           </main>
         </ThemeProvider>
