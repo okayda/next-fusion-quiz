@@ -1,23 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
+import { questions, difficulty, subject } from "@/constants";
+
+import SubjectImage from "@/components/SubjectImage";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { questions, difficulty, subject } from "@/constants";
 
 export default function HomeContent() {
   const [selectedQuestions, setSelectedQuestions] = useState("3");
   const [selectedDifficulty, setSelectedDifficulty] = useState("Easy");
 
-  const handleQuestionsChange = (value: string) => {
+  const handleQuestionsChange = function (value: string) {
     setSelectedQuestions(value);
   };
 
-  const handleDifficultyChange = (value: string) => {
+  const handleDifficultyChange = function (value: string) {
     setSelectedDifficulty(value);
   };
 
@@ -69,7 +70,7 @@ export default function HomeContent() {
         <p className="mb-3">Pick a subject to get started.</p>
 
         <ul className="flex flex-col gap-3">
-          {subject.map(({ title, value, img }) => (
+          {subject.map(({ title, value }) => (
             <li key={title}>
               <Link
                 href={{
@@ -85,34 +86,7 @@ export default function HomeContent() {
                   "flex h-auto w-full items-center justify-start gap-4 border p-2 text-lg font-semibold tracking-wide hover:border-green-500 dark:bg-slate-900 md:p-3 lg:px-4 lg:text-2xl",
                 )}
               >
-                <div className="rounded-sm bg-background p-1 dark:bg-slate-800">
-                  {title === "Next.js" ? (
-                    <>
-                      <Image
-                        src="/svgs/nextjs-light.svg"
-                        alt=""
-                        width={30}
-                        height={30}
-                        className="z-20 dark:hidden"
-                      />
-                      <Image
-                        src="/svgs/nextjs-dark.svg"
-                        alt=""
-                        width={30}
-                        height={30}
-                        className="z-20 hidden dark:block"
-                      />
-                    </>
-                  ) : (
-                    <Image
-                      src={img}
-                      alt=""
-                      width={30}
-                      height={30}
-                      className="z-20"
-                    />
-                  )}
-                </div>
+                <SubjectImage subjectName={value} size={30} />
                 {title}
               </Link>
             </li>

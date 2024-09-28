@@ -14,22 +14,18 @@ export const subject = [
   {
     title: "JavaScript",
     value: "javascript",
-    img: "/svgs/javascript.svg",
   },
   {
     title: "TypeScript",
     value: "typescript",
-    img: "/svgs/typescript.svg",
   },
   {
     title: "React.js",
     value: "react",
-    img: "/svgs/reactjs.svg",
   },
   {
     title: "Next.js",
     value: "next",
-    img: "/svgs/nextjs-light.svg",
   },
 ];
 

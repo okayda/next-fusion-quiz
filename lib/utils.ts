@@ -1,6 +1,18 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+export type Question = {
+  choices: string[];
+  question: string;
+  answer: string;
+  explanation: string;
+  hasCodeSyntax: boolean;
+  code: string;
+};
+
+export const capitalize = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1);
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }

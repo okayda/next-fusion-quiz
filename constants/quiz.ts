@@ -320,18 +320,17 @@ console.log(a);`,
     },
     {
       question:
-        "Which of the following statements is true about the `===` operator in JavaScript?",
-      choices: [
-        "`===` checks for both value and type equality",
-        "`===` is the same as `==`",
-        "`===` only checks for value equality",
-        "`===` is used to compare arrays",
-      ],
-      answer: "`===` checks for both value and type equality",
+        "What will be logged to the console when the following JavaScript code is executed?",
+      choices: ["0 1 2 3 4", "5 5 5 5 5", "0 1 2 3 4 5", "Error"],
+      answer: "`5 5 5 5 5`",
       explanation:
-        "The `===` operator checks for both value and type equality, also known as strict equality. For example, `3 === '3'` is `false` because one is a number and the other is a string.",
-      hasCodeSyntax: false,
-      code: ``,
+        "Using `var` declares a function-scoped variable. By the time the `setTimeout` callbacks are executed, the loop has completed, and `i` has the value `5`. Therefore, the number `5` is logged five times.",
+      hasCodeSyntax: true,
+      code: `for (var i = 0; i < 5; i++) {
+  setTimeout(function() {
+    console.log(i);
+  }, 0);
+}`,
     },
     {
       question: "What will the following JavaScript code output?",
