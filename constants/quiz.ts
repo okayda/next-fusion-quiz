@@ -322,7 +322,7 @@ console.log(a);`,
       question:
         "What will be logged to the console when the following JavaScript code is executed?",
       choices: ["0 1 2 3 4", "5 5 5 5 5", "0 1 2 3 4 5", "Error"],
-      answer: "`5 5 5 5 5`",
+      answer: "5 5 5 5 5",
       explanation:
         "Using `var` declares a function-scoped variable. By the time the `setTimeout` callbacks are executed, the loop has completed, and `i` has the value `5`. Therefore, the number `5` is logged five times.",
       hasCodeSyntax: true,

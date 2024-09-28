@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { questions, difficulty, subject } from "@/constants";
 
+import { ExternalLink } from "lucide-react";
 import SubjectImage from "@/components/SubjectImage";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -69,7 +70,7 @@ export default function HomeContent() {
       <div className="lg:flex-1">
         <p className="mb-3">Pick a subject to get started.</p>
 
-        <ul className="flex flex-col gap-3">
+        <ul className="mb-4 flex flex-col gap-3">
           {subject.map(({ title, value }) => (
             <li key={title}>
               <Link
@@ -92,6 +93,27 @@ export default function HomeContent() {
             </li>
           ))}
         </ul>
+
+        <p className="text-sm">
+          <span className="font-semibold text-green-600 dark:text-green-400">
+            Design
+          </span>{" "}
+          &{" "}
+          <span className="font-semibold text-green-600 dark:text-green-400">
+            Develop
+          </span>{" "}
+          by{" "}
+          <Link
+            href="https://jhon-quenano-portfolio.vercel.app/"
+            target="_blank"
+            className="inline-block border-b-2 border-b-sky-400 font-semibold"
+          >
+            <span className="flex items-center gap-1">
+              Jhon Queñano
+              <ExternalLink size={13} />
+            </span>
+          </Link>
+        </p>
       </div>
     </>
   );

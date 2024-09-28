@@ -25,7 +25,7 @@ const MyCodeBlock = dynamic(() => import("@/components/MyCodeBlock"), {
 
 const optionLabels = ["a", "b", "c", "d"];
 
-export default function QuizPage() {
+export default function GeneratedPage() {
   const [selectedOption, setSelectedOption] = useState("");
   const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState(false);
 
