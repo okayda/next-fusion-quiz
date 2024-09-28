@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
+import { cn, shuffleArray } from "@/lib/utils";
 import * as RadioGroup from "@radix-ui/react-radio-group";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -14,19 +16,40 @@ import { LogOut, BadgeCheck, CircleX } from "lucide-react";
 
 import { answers } from "@/constants";
 import { quiz } from "@/constants/quiz";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+
+type Question = {
+  choices: string[];
+  question: string;
+  answer: string;
+  explanation: string;
+  hasCodeSyntax: boolean;
+  code: string;
+};
 
 const MyCodeBlock = dynamic(() => import("@/components/MyCodeBlock"), {
   ssr: false,
 });
 
+const languageImgs = {
+  javascript: {
+    img: "/svgs/javascript.svg",
+  },
+  typescript: {
+    img: "/svgs/typescript.svg",
+  },
+  react: {
+    img: "/svgs/reactjs.svg",
+  },
+};
 const optionLabels = ["a", "b", "c", "d"];
 
 export default function QuizPage() {
   const [selectedOption, setSelectedOption] = useState("");
   const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState(false);
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const [questionsList, setQuestionsList] = useState<Question[]>([]);
 
   const searchParams = useSearchParams();
 
@@ -36,24 +59,70 @@ export default function QuizPage() {
 
   const quizKey =
     `${subjectName}${difficultyLevel}${totalQuestions}` as keyof typeof quiz;
-  const questionsList = quiz[quizKey];
+
+  useEffect(() => {
+    const initialQuestionsList = quiz[quizKey];
+
+    const shuffledQuestionsList = initialQuestionsList.map((question) => {
+      const shuffledChoices = shuffleArray(question.choices);
+      return { ...question, choices: shuffledChoices };
+    });
+
+    setQuestionsList(shuffledQuestionsList);
+  }, [quizKey]);
 
   // Handle the case when the quiz is over
   if (currentQuestionIndex >= questionsList.length) {
     return (
       <div className="text-center">
-        <h1 className="text-2xl font-bold">Quiz Completed</h1>
+        <div className="mb-3 inline-block rounded-sm border border-slate-200 bg-background p-1 dark:border-slate-700 dark:bg-slate-900">
+          {subjectName === "next" ? (
+            <>
+              <Image
+                src="/svgs/nextjs-light.svg"
+                alt=""
+                width={80}
+                height={80}
+                className="dark:hidden"
+              />
+              <Image
+                src="/svgs/nextjs-dark.svg"
+                alt=""
+                width={80}
+                height={80}
+                className="hidden dark:block"
+              />
+            </>
+          ) : (
+            <Image
+              src={languageImgs[subjectName as keyof typeof languageImgs].img}
+              alt=""
+              width={80}
+              height={80}
+            />
+          )}
+        </div>
+
+        <h2 className="text-2xl font-bold">
+          <span className="font-semibold text-green-600">
+            {difficultyLevel.charAt(0).toUpperCase() + difficultyLevel.slice(1)}
+          </span>{" "}
+          Quiz Completed
+        </h2>
         <p className="mt-4 text-lg">
-          Your score: {correctAnswersCount} out of {questionsList.length}
+          Your score: <strong>{correctAnswersCount}</strong> out of{" "}
+          <strong>{questionsList.length}</strong>
         </p>
+
         <Link
           href="/"
           className={cn(
             buttonVariants({ variant: "secondary" }),
-            "mt-6 gap-2 border border-rose-900 font-bold text-rose-700 dark:bg-slate-900",
+            "mt-6 gap-2 border border-rose-800 font-bold text-rose-800 dark:bg-slate-900",
           )}
         >
           Return Home
+          <LogOut width={16} height={16} />
         </Link>
       </div>
     );
@@ -77,21 +146,49 @@ export default function QuizPage() {
   return (
     <div className="lg:flex lg:gap-14">
       <div className="lg:w-full lg:max-w-[560px]">
-        <div className="mb-6 lg:mb-8">
+        <div className="mb-6 flex items-center justify-between lg:mb-8">
           <Link
             href="/"
             className={cn(
               buttonVariants({ variant: "secondary" }),
-              "gap-2 border border-rose-900 text-[15px] font-semibold text-rose-900 dark:bg-slate-900",
+              "gap-2 border border-rose-800 text-[15px] font-semibold text-rose-800 dark:bg-slate-900",
             )}
           >
             Exit Quiz
             <LogOut width={16} height={16} />
           </Link>
+
+          <div className="rounded-sm border border-slate-200 bg-background p-1 dark:border-slate-700 dark:bg-slate-900">
+            {subjectName === "next" ? (
+              <>
+                <Image
+                  src="/svgs/nextjs-light.svg"
+                  alt=""
+                  width={30}
+                  height={30}
+                  className="dark:hidden"
+                />
+                <Image
+                  src="/svgs/nextjs-dark.svg"
+                  alt=""
+                  width={30}
+                  height={30}
+                  className="hidden dark:block"
+                />
+              </>
+            ) : (
+              <Image
+                src={languageImgs[subjectName as keyof typeof languageImgs].img}
+                alt=""
+                width={30}
+                height={30}
+              />
+            )}
+          </div>
         </div>
 
         <div className="mb-4">
-          <p className="mb-2 text-sm md:text-base">
+          <p className="text-sm md:text-base">
             <span className="font-semibold text-green-600">
               {difficultyLevel.charAt(0).toUpperCase() +
                 difficultyLevel.slice(1)}
@@ -123,10 +220,10 @@ export default function QuizPage() {
 
         <p
           className={cn(
-            "text-[15px] font-semibold leading-snug lg:mb-0",
+            "text-[15px] font-semibold leading-snug",
             currentQuestion.hasCodeSyntax
               ? "mb-2.5 md:text-base"
-              : "mb-3 md:text-lg",
+              : "mb-3 md:text-lg lg:mb-0",
           )}
         >
           {currentQuestion.question}
@@ -223,9 +320,13 @@ export default function QuizPage() {
               type="button"
               variant="secondary"
               onClick={handleNextQuestion}
-              className="h-[42px] w-full border border-green-700 bg-background font-semibold"
+              className="h-[42px] w-full gap-2 border border-green-700 bg-background font-semibold"
             >
-              Next Question
+              {currentQuestionIndex === totalQuestions - 1
+                ? "Finished"
+                : " Next Question"}
+
+              <LogOut width={16} height={16} />
             </Button>
           )}
         </div>
