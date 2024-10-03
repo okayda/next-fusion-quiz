@@ -565,17 +565,7 @@ console.log(sum.length);`,
       hasCodeSyntax: false,
       code: ``,
     },
-    {
-      question: "What will the following JavaScript code output?",
-      choices: ["5", "false", "TypeError", "ReferenceError"],
-      answer: "5",
-      explanation:
-        "The code first logs the value of `x`, which is `5`. Then it evaluates `typeof x === 'undefined'`. Since `x` is defined and has a value, `typeof x` returns `'number'`. Therefore, `'number' === 'undefined'` evaluates to `false`. However, since only `5` matches the provided choices, the correct output is `5`.",
-      hasCodeSyntax: true,
-      code: `let x = 5;
-console.log(x);
-console.log(typeof x === 'undefined');`,
-    },
+
     {
       question:
         "Which of the following best describes the difference between `call()`, `apply()`, and `bind()` methods in JavaScript?",
@@ -1385,21 +1375,6 @@ console.log(sayHello());`,
 const details = { age: 30 };
 const fullDetails = { ...person, ...details };
 console.log(fullDetails);`,
-    },
-    {
-      question:
-        "Which of the following correctly describes how to create a union type in TypeScript?",
-      choices: [
-        "Using the `|` symbol between types",
-        "Using the `&` symbol between types",
-        "Using the `extends` keyword",
-        "Using the `implements` keyword",
-      ],
-      answer: "Using the `|` symbol between types",
-      explanation:
-        "Union types are created using the `|` symbol, allowing a variable to be one of several types. For example, `type ID = string | number;` means `ID` can be a `string` or a `number`.",
-      hasCodeSyntax: false,
-      code: ``,
     },
   ],
 
@@ -3082,22 +3057,6 @@ console.log(fullDetails);`,
         "By mapping incoming request paths to different destination paths without changing the displayed URL",
       explanation:
         "The `rewrites` configuration allows you to internally route requests from one path to another without changing the URL in the browser. This is useful for hiding internal route structures or proxying requests to external services while maintaining clean URLs.",
-      hasCodeSyntax: false,
-      code: ``,
-    },
-    {
-      question:
-        "What is the advantage of using `next/dynamic` for dynamic imports in Next.js?",
-      choices: [
-        "It allows components to be loaded on demand, reducing initial bundle sizes and improving load times",
-        "It handles server-side rendering for dynamic data",
-        "It manages dynamic API routes",
-        "It enables client-side navigation with dynamic parameters",
-      ],
-      answer:
-        "It allows components to be loaded on demand, reducing initial bundle sizes and improving load times",
-      explanation:
-        "`next/dynamic` enables dynamic imports of components, which means components are only loaded when they are needed. This reduces the initial JavaScript bundle size, leading to faster page loads and improved performance, especially for large applications.",
       hasCodeSyntax: false,
       code: ``,
     },

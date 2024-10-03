@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 import { questions, difficulty, subject } from "@/constants";
@@ -24,7 +24,7 @@ export default function HomeContent() {
   };
 
   return (
-    <>
+    <React.Fragment>
       <div className="lg:max-w-[500px]">
         <h1 className="mb-10 text-4xl md:mb-16 lg:text-5xl lg:leading-tight">
           Welcome to the <span className="font-semibold">Fusion Quiz!</span>
@@ -115,6 +115,6 @@ export default function HomeContent() {
           </Link>
         </p>
       </div>
-    </>
+    </React.Fragment>
   );
 }

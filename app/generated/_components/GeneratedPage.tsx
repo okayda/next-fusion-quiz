@@ -32,6 +32,7 @@ export default function GeneratedPage() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
   const [questionsList, setQuestionsList] = useState<Question[]>([]);
+  const [activeTab, setActiveTab] = useState("Question");
 
   const searchParams = useSearchParams();
 
@@ -84,6 +85,7 @@ export default function GeneratedPage() {
     setCurrentQuestionIndex((prev) => prev + 1);
     setHasSubmittedAnswer(false);
     setSelectedOption("");
+    setActiveTab("Question");
   };
 
   return (
@@ -119,7 +121,7 @@ export default function GeneratedPage() {
         </div>
 
         {/* Tabs question & explanation */}
-        <Tabs defaultValue="Question">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-6 grid min-h-[45px] w-full grid-cols-2 border font-bold text-foreground md:mb-8">
             {answers.map((tab) => (
               <TabsTrigger key={tab.label} value={tab.value}>
@@ -155,18 +157,26 @@ export default function GeneratedPage() {
           </TabsContent>
 
           <TabsContent value="Explanation">
-            <p
-              className={cn(
-                "text-[15px] font-semibold leading-snug",
-                currentQuestion.hasCodeSyntax
-                  ? "mb-2.5 md:text-base"
-                  : "mb-3 md:text-lg lg:mb-0",
-              )}
-            >
-              {currentQuestion.explanation}
-            </p>
+            {hasSubmittedAnswer ? (
+              <div>
+                <p
+                  className={cn(
+                    "text-[15px] font-semibold leading-snug",
+                    currentQuestion.hasCodeSyntax
+                      ? "mb-2.5 md:text-base"
+                      : "mb-3 md:text-lg lg:mb-0",
+                  )}
+                >
+                  {currentQuestion.explanation}
+                </p>
+              </div>
+            ) : (
+              <p className="mb-3 font-semibold md:text-lg lg:mb-0">
+                You need to submit your answer first.
+              </p>
+            )}
 
-            <Separator className="mb-6 border" />
+            <Separator className="mb-6 border lg:hidden" />
           </TabsContent>
         </Tabs>
       </div>
